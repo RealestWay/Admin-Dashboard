@@ -1,70 +1,40 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Homepage from "./pages/Homepage";
-import PageNotFound from "./pages/PageNotFound";
-import AboutUs from "./pages/AboutUs";
-import ContactUs from "./pages/ContactUs";
-import SignIn from "./pages/Auth/SignIn";
-import Signup from "./pages/Auth/Signup";
-import ForgotPassword from "./pages/Auth/ForgotPassword";
-import Verify from "./pages/Auth/Verify";
-import HouseDetails from "./pages/Product/HouseDetails";
-import MapDetails from "./pages/Product/MapDetails";
-import ItemView from "./pages/Product/ItemView";
-import UserProfile from "./pages/User/UserProfile";
-import { AuthProvider } from "./contexts/AuthContext";
-import ItemsPage from "./pages/Product/ItemsPage";
+import Dashboard from "./pages/Dashboard";
+import Properties from "./pages/Properties";
+import Users from "./pages/User/Users";
+import Transactions from "./pages/Transactions";
+import Reports from "./pages/Reports";
+import Settings from "./pages/Settings";
+import ScrollToTop from "./components/ScrollToTop";
+import AdminLayout from "./pages/AdminLayout";
 import { HouseProvider } from "./contexts/HouseContext";
-// import { AgentProvider } from "./contexts/AgentContext";
-// import { UserProvider } from "./contexts/UsersContext";
-import ProtectedRoutes from "./ProtectedRoutes";
+import { AgentsUsersProvider } from "./contexts/AgentsUsersContext";
+import User from "./pages/User/User";
+import Agents from "./pages/User/Agents";
 
-const App = () => {
+function App() {
   return (
-    //Passing Context values
-    <AuthProvider>
-      <HouseProvider>
+    <HouseProvider>
+      <AgentsUsersProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="SignIn" element={<SignIn />} />
-            <Route path="SignUp" element={<Signup />} />
-            <Route
-              path="Profile"
-              element={
-                <ProtectedRoutes>
-                  <UserProfile />
-                </ProtectedRoutes>
-              }
-            />
-            <Route path="AboutUs" element={<AboutUs />} />
-            <Route path="ContactUs" element={<ContactUs />} />
-            <Route
-              path="/ItemsPage"
-              element={
-                <ProtectedRoutes>
-                  <ItemsPage />
-                </ProtectedRoutes>
-              }
-            />
-            <Route
-              path="ItemView/:id"
-              element={
-                <ProtectedRoutes>
-                  <ItemView />
-                </ProtectedRoutes>
-              }
-            >
-              <Route index element={<HouseDetails />} />
-              <Route path="mapDetails" element={<MapDetails />} />
+            <Route path="/" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="/properties" element={<Properties />} />
+              <Route path="/user" element={<User />}>
+                <Route index element={<Users />} />
+                <Route path="/user/agents" element={<Agents />} />
+              </Route>
+              <Route path="/transactions" element={<Transactions />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
-            <Route path="Verify" element={<Verify />} />
-            <Route path="forgotPassword" element={<ForgotPassword />} />
-            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
-      </HouseProvider>
-    </AuthProvider>
+      </AgentsUsersProvider>
+    </HouseProvider>
   );
-};
+}
 
 export default App;

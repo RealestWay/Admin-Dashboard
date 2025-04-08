@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const HouseContext = createContext();
-const BASEURL = "http://localhost:9000";
+
+// const BASEURL = "https://realestway.com/.netlify/functions/api";
+// const BASEURL = "http://localhost:9000";
 
 const HouseProvider = ({ children }) => {
   const [houses, setHouses] = useState([]);
@@ -9,27 +11,24 @@ const HouseProvider = ({ children }) => {
   const [filter, setFilter] = useState({});
 
   async function fetchHouses() {
-    try {
-      setIsLoading(true);
-      const res = await fetch(`${BASEURL}/houses`);
-      const data = await res.json();
-      setHouses(data);
-      localStorage.setItem("houses", JSON.stringify(data));
-    } catch {
-      alert("there was an error loading your data...");
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    setTimeout(async () => {
+      try {
+        // const res = await fetch(`${BASEURL}/houses`);
+        const res = await fetch(
+          "https://realestway-backend.up.railway.app/api/listings"
+        );
+        const data = await res.json();
+        setHouses(data);
+      } catch {
+        alert("there was an error loading your data...");
+      } finally {
+        setIsLoading(false);
+      }
+    }, 5000);
   }
   useEffect(() => {
-    const cachedHouses = localStorage.getItem("houses");
-
-    if (cachedHouses) {
-      setHouses(JSON.parse(cachedHouses));
-      setIsLoading(false);
-    } else {
-      fetchHouses();
-    }
+    fetchHouses();
   }, []);
   return (
     <HouseContext.Provider
