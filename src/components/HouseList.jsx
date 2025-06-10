@@ -1,48 +1,16 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { UseHouses } from "../contexts/HouseContext";
+import { useAuth } from "../contexts/AuthContext";
 
-// Sample data
-// const houses = [
-//   {
-//     id: "h1742375816900",
-//     title: "Conducive Selfcon for singles",
-//     address: "Obia/Akpor, Rumuodomaya, Nigeria",
-//     price: 550000,
-//     agent_id: "A002",
-//     available: true,
-//     propertyType: "Self Contain",
-//     images: ["/img1f1.jpg", "/img1f2.jpg"],
-//   },
-//   {
-//     id: "h1742375816901",
-//     title: "Luxury 3 Bedroom Apartment",
-//     address: "Victoria Island, Lagos, Nigeria",
-//     price: 1200000,
-//     agent_id: "A001",
-//     available: false,
-//     propertyType: "Apartment",
-//     images: ["/img2f1.jpg", "/img2f2.jpg"],
-//   },
-//   {
-//     id: "h1742375816902",
-//     title: "Cozy 2 Bedroom Flat",
-//     address: "Ikoyi, Lagos, Nigeria",
-//     price: 800000,
-//     agent_id: "A003",
-//     available: true,
-//     propertyType: "Apartment",
-//     images: ["/img3f1.jpg", "/img3f2.jpg"],
-//   },
-//   // More houses...
-// ];
 const HouseList = ({
   grid,
   availabilityFilter,
   searchQuery,
   propertyTypeFilter,
 }) => {
-  const { houses } = UseHouses();
+  const { houses, deleteHouse } = UseHouses();
+  const { token } = useAuth();
 
   const filterHouses = (
     houses,
@@ -52,14 +20,21 @@ const HouseList = ({
   ) => {
     return houses.data?.filter((house) => {
       // Filter by availability
-      if (availabilityFilter === "available" && !house?.available) return false;
-      if (availabilityFilter === "notAvailable" && house?.available)
+      // if (availabilityFilter === "available" && !house?.availability)
+      //   return false;
+      // if (availabilityFilter === "notAvailable" && house?.availability)
+      //   return false;
+      if (
+        availabilityFilter !== "all" &&
+        house?.availability !== availabilityFilter
+      ) {
         return false;
+      }
 
       // Filter by agent ID (search query)
       if (
         searchQuery &&
-        !house?.agent_id.toLowerCase().includes(searchQuery.toLowerCase())
+        !house?.agentId.toLowerCase().includes(searchQuery.toLowerCase())
       ) {
         return false;
       }
@@ -85,36 +60,54 @@ const HouseList = ({
 
   if (!grid)
     return (
-      <div className="flex flex-col p-2 gap-2">
-        {filteredHouses?.map((house) => (
-          <div
-            key={house?.id}
-            className="border flex justify-between items-center p-4 rounded-lg shadow-lg overflow-hidden bg-white"
-          >
-            <img
-              src={house?.images[0]} // Display the first image
-              alt={house?.title}
-              className="w-6 h-6 object-cover"
-            />
-
-            <h3 className="text-lg font-semibold text-blue-900">
-              {house?.title}
-            </h3>
-
-            <p className="text-xl font-bold text-green-500 mt-2">
-              ₦{house?.price}
-            </p>
-            <p className="text-xl font-bold text-green-500 mt-2">
-              ₦{house?.date}
-            </p>
-            <Link
-              to={`/house/${house?.id}`}
-              className="text-blue-600 hover:text-blue-800 mt-4 block"
-            >
-              View Details
-            </Link>
-          </div>
-        ))}
+      <div className="overflow-x-auto p-2">
+        <table className="min-w-full table-auto border-collapse border border-gray-300 bg-white rounded-lg shadow-md">
+          <thead>
+            <tr className="bg-gray-100 text-left text-sm font-semibold text-gray-700">
+              <th className="border px-4 py-2">Image</th>
+              <th className="border px-4 py-2">Title</th>
+              <th className="border px-4 py-2">Total Price</th>
+              <th className="border px-4 py-2">Created At</th>
+              <th className="border px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredHouses?.map((house) => (
+              <tr key={house?.id} className="hover:bg-gray-50 transition">
+                <td className="border px-4 py-2">
+                  <img
+                    src={`https://backend.realestway.com/storage/${house?.images[0]?.src}`}
+                    alt={house?.title}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                </td>
+                <td className="border px-4 py-2 text-blue-900 font-medium">
+                  {house?.title}
+                </td>
+                <td className="border px-4 py-2 text-green-600 font-bold">
+                  ₦{house?.totalPrice}
+                </td>
+                <td className="border px-4 py-2 text-gray-700">
+                  {house?.createdAt}
+                </td>
+                <td className="border px-4 py-2 space-x-2">
+                  <Link
+                    to={`/house/${house?.uniqueId}`}
+                    className="text-sm text-[#100073] hover:underline"
+                  >
+                    View
+                  </Link>
+                  <button
+                    onClick={() => deleteHouse(house?.uniqueId, token)}
+                    className="text-sm text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
 
@@ -126,7 +119,7 @@ const HouseList = ({
           className="border rounded-lg shadow-lg overflow-hidden bg-white"
         >
           <img
-            src={house?.images[0]} // Display the first image
+            src={`https://backend.realestway.com/storage/${house?.images[0].src}`} // Display the first image
             alt={house?.title}
             className="w-full h-48 object-cover"
           />
@@ -134,15 +127,16 @@ const HouseList = ({
             <h3 className="text-lg font-semibold text-blue-900">
               {house?.title}
             </h3>
-            <p className="text-sm text-gray-600">{house?.address}</p>
-            <p className="text-xl font-bold text-green-500 mt-2">
-              ₦{house?.price}
+            <p className="text-sm text-gray-600">{house?.location.address}</p>
+            <p className="text-xl font-bold flex justify-between text-green-500 mt-2">
+              <span>₦{house?.totalPrice}</span>{" "}
+              <span className="text-xs">{house?.availability}</span>
             </p>
             <Link
-              to={`/house/${house.id}`}
-              className="text-blue-600 hover:text-blue-800 mt-4 block"
+              to={`/house/${house.uniqueId}`}
+              className="text-[#100073] hover:text-blue-800 mt-4 block"
             >
-              View Details
+              <span> View Details</span>
             </Link>
           </div>
         </div>

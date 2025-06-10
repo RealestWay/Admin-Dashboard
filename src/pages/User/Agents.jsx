@@ -5,32 +5,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useAgentsUsers } from "../../contexts/AgentsUsersContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { UseHouses } from "../../contexts/HouseContext";
 
 const Agents = () => {
-  const [status, setStatus] = useState("");
-  const { agents } = useAgentsUsers();
-
-  const handleDelete = async (id) => {
-    const url = `https://realestway-backend.up.railway.app/api/agents/${id}`;
-    const headers = {
-      Accept: "application/json",
-    };
-
-    try {
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: headers,
-      });
-
-      if (response.ok) {
-        setStatus(`User ${id} deleted successfully.`);
-      } else {
-        setStatus(`Failed to delete user ${id}. Status: ${response.status}`);
-      }
-    } catch (error) {
-      setStatus(`Error: ${error.message}`);
-    }
-  };
+  const { agents, handleDelete } = useAgentsUsers();
+  const { token } = useAuth();
+  const { houses } = UseHouses();
 
   const [page, setPage] = useState(0);
   const rowsPerPage = 5;
@@ -115,9 +96,10 @@ const Agents = () => {
               email={user.email}
               name={user.fullname}
               phone={user.phone}
-              rented={user.rented_houses}
+              houses={houses}
               index={index}
               handleDelete={handleDelete}
+              token={token}
             />
           ))}
         </tbody>
@@ -126,8 +108,19 @@ const Agents = () => {
   );
 };
 
-const Body = ({ id, phone, email, name, rented, index, handleDelete }) => {
+const Body = ({
+  id,
+  phone,
+  email,
+  name,
+  houses,
+  index,
+  handleDelete,
+  token,
+}) => {
   const [open, setOpen] = useState(false);
+  const agentHouses = houses.data.filter((house) => house.agentId === id);
+
   return (
     <tr
       style={{
@@ -163,7 +156,7 @@ const Body = ({ id, phone, email, name, rented, index, handleDelete }) => {
           gap: "8px",
         }}
       >
-        {rented}
+        {agentHouses.length}
       </td>
 
       <td style={{ padding: "8px", position: "relative" }}>
@@ -238,7 +231,7 @@ const Body = ({ id, phone, email, name, rented, index, handleDelete }) => {
                 padding: "6px 18px",
                 width: "100%",
               }}
-              onClick={() => handleDelete(id)}
+              onClick={() => handleDelete(id, token)}
             >
               Delete
             </button>

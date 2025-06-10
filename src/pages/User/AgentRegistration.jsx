@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const AgentRegistration = () => {
+  const { token } = useAuth();
   const [formData, setFormData] = useState({
-    fullname: "",
+    full_name: "",
+    company_name: "",
     email: "",
     phone: "",
     password: "",
@@ -10,7 +13,7 @@ const AgentRegistration = () => {
     nin: "",
     address: "",
   });
-
+  // console.log(user, token);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -23,6 +26,24 @@ const AgentRegistration = () => {
     }));
   };
 
+  // Delete user to reg as agent
+  // const handleUserDelete = async (userId) => {
+  //   try {
+  //     const res = await fetch(
+  //       `https://backend.realestway.com/api/users/${userId}`,
+  //       {
+  //         method: "DELETE",
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${token}`, // Auth token here
+  //         },
+  //       }
+  //     );
+  //   } catch {
+  //     return null;
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -31,11 +52,12 @@ const AgentRegistration = () => {
 
     try {
       const response = await fetch(
-        "https://realestway-backend.up.railway.app/api/agents/register",
+        "https://backend.realestway.com/api/agents/register",
         {
           method: "POST",
           headers: {
             Accept: "application/json",
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
@@ -55,6 +77,25 @@ const AgentRegistration = () => {
       setLoading(false);
     }
   };
+
+  // Nin verification function
+  // const verifyNin = async (nin) => {
+  //   try {
+  //     const res = await fetch(
+  //       `https://api.korapay.com/merchant/api/v1/identities/ng/${nin}`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const data = await res.JSON();
+  //     console.log(data);
+  //   } catch {
+  //     alert("This user does not exist");
+  //   }
+  // };
 
   return (
     <div className="container mx-auto px-6 py-8">
@@ -78,9 +119,24 @@ const AgentRegistration = () => {
           </label>
           <input
             type="text"
-            id="fullname"
-            name="fullname"
-            value={formData.fullname}
+            id="full_name"
+            name="full_name"
+            value={formData.full_name}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+        {/* Fullname Field */}
+        <div className="mb-4">
+          <label htmlFor="comapnyName" className="block text-gray-700">
+            Company Name
+          </label>
+          <input
+            type="text"
+            id="company_name"
+            name="company_name"
+            value={formData.company_name}
             onChange={handleChange}
             required
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
@@ -167,7 +223,10 @@ const AgentRegistration = () => {
             onChange={handleChange}
             required
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-          />
+          />{" "}
+          {/* <button type="button" onClick={() => verifyNin(formData.nin)}>
+            verify
+          </button> */}
         </div>
 
         {/* Address Field */}

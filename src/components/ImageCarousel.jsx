@@ -4,7 +4,7 @@ const ImageCarousel = ({ images }) => {
       {images.map((src, index) => (
         <img
           key={index}
-          src={`../src/images${src}`}
+          src={`https://backend.realestway.com/storage/${src}`}
           className="object-cover rounded-lg shadow-md snap-start"
           alt={`Gallery ${index + 1}`}
           sizes="cover"

@@ -4,15 +4,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { useAgentsUsers } from "../../contexts/AgentsUsersContext";
 
-const Users = () => {
-  const { handleDeleteUser, setStatus, users } = useAgentsUsers();
-  const { token } = useAuth();
+const OnboardingAgents = () => {
+  const { awaitingAgents } = useAgentsUsers();
+
   const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
-  const allUsers = users.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+  const rowsPerPage = 15;
+  const sagents = awaitingAgents?.slice(
+    page * rowsPerPage,
+    (page + 1) * rowsPerPage
+  );
 
   return (
     <div
@@ -31,7 +33,9 @@ const Users = () => {
           alignItems: "center",
         }}
       >
-        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>All Users</h3>{" "}
+        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>
+          Awaiting Agents
+        </h3>
         <div style={{ display: "flex", gap: 1, borderRadius: "50px" }}>
           <button
             onClick={() => setPage(page - 1)}
@@ -50,7 +54,7 @@ const Users = () => {
           </button>
           <button
             onClick={() => setPage(page + 1)}
-            disabled={(page + 1) * rowsPerPage >= users.length}
+            disabled={(page + 1) * rowsPerPage >= awaitingAgents?.length}
             style={{
               background: "#EAEEF4",
               border: "none",
@@ -75,44 +79,34 @@ const Users = () => {
       >
         <thead>
           <tr style={{ backgroundColor: "#F1F3F9" }}>
-            <th style={{ padding: "8px" }}>User ID</th>
-            <th style={{ padding: "8px" }}>User Name</th>
+            <th style={{ padding: "8px" }}>Full Name</th>
             <th style={{ padding: "8px" }}>Phone Number</th>
-            <th style={{ padding: "8px" }}>Rented House </th>
-            <th style={{ padding: "8px" }}>Action</th>
+            <th style={{ padding: "8px" }}>Email</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {allUsers.map((user, index) => (
+          {sagents?.map((user, index) => (
             <Body
-              key={index}
-              id={user.id}
+              key={user.id}
               email={user.email}
-              name={user.name}
+              name={user.fullName}
               phone={user.phone}
-              rented={user.rented_houses}
               index={index}
-              token={token}
-              handleDeleteUser={handleDeleteUser}
             />
           ))}
         </tbody>
       </table>
+      {/* <div>
+        <p>{status}</p>
+      </div> */}
     </div>
   );
 };
 
-const Body = ({
-  id,
-  phone,
-  email,
-  name,
-  rented,
-  index,
-  token,
-  handleDeleteUser,
-}) => {
-  const [open, setOpen] = useState();
+const Body = ({ phone, email, name, index }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <tr
       style={{
@@ -120,7 +114,6 @@ const Body = ({
         background: index % 2 ? "#F8F9FC" : "",
       }}
     >
-      <td style={{ padding: "8px" }}>{id}</td>
       <td
         style={{
           padding: "8px",
@@ -148,7 +141,7 @@ const Body = ({
           gap: "8px",
         }}
       >
-        {rented}
+        {email}
       </td>
 
       <td style={{ padding: "8px", position: "relative" }}>
@@ -202,6 +195,7 @@ const Body = ({
               style={{
                 borderBottom: "1px solid gray",
                 padding: "6px 18px",
+                width: "100%",
                 gap: 2,
               }}
             >
@@ -211,28 +205,25 @@ const Body = ({
               style={{
                 borderBottom: "1px solid gray",
                 padding: "6px 18px",
-                gap: 2,
+                width: "100%",
               }}
             >
               Suspend
             </button>
             <button
-              onClick={() => handleDeleteUser(id, token)}
               style={{
                 borderBottom: "1px solid gray",
                 padding: "6px 18px",
-                gap: 2,
+                width: "100%",
               }}
             >
               Delete
             </button>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
       </td>
     </tr>
   );
 };
 
-export default Users;
+export default OnboardingAgents;

@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 const Items = ({ house }) => {
-  const { title, price, images, location, id } = house;
+  const { title, totalPrice, images, location, id, description } = house;
   const { isAuthenticated } = useAuth();
 
   const itemStyle = `rounded-xl w-full items-center justify-center h-[200px]`;
@@ -17,7 +17,7 @@ const Items = ({ house }) => {
       <div
         className={itemStyle}
         style={{
-          background: `url(../src/images${images[0]})`,
+          background: `url(https://backend.realestway.com/storage/${images[0].src})`,
           backgroundSize: "cover",
           overflow: "hidden",
         }}
@@ -53,13 +53,10 @@ const Items = ({ house }) => {
         )}
         <div>30 views</div>
       </div>
-      <p className="text-xs py-2">
-        Exotic and more, kilo tun fe mo? kosewe kosegbo, intact and elegant.
-        Tadah!
-      </p>
+      <p className="text-xs py-2">{description}</p>
       <div className="items-center flex py-3">
         <span className="m-auto">
-          <span className="text-2xl font-bold w-1/4">#{price}</span>
+          <span className="text-2xl font-bold w-1/4">#{totalPrice}</span>
           <span className="text-sm">/year</span>
         </span>
       </div>

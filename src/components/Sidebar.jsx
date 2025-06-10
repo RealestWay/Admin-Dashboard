@@ -7,11 +7,12 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="w-[21%] bg-blue-900 text-white min-h-screen p-6 shadow-lg">
+    <div className="w-[21%] bg-[#100073] text-white min-h-screen p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-12 text-center text-white">
-        Realestway
+        Admin Dashboard
       </h2>
-      <nav className="flex flex-col gap-6">
+      <hr />
+      <nav className="flex flex-col gap-6 pt-7">
         <SidebarLink to="/" label="Dashboard" isActive={isActive("/")} />
         <SidebarLink
           to="/properties"
@@ -50,7 +51,7 @@ const SidebarLink = ({ to, label, isActive }) => {
       className={`block py-2 px-4 rounded-lg transition-all duration-300 ${
         isActive
           ? "bg-gradient-to-r from-green-400 via-blue-500 to-green-400 text-white shadow-lg scale-105"
-          : "text-gray-200 hover:text-white hover:bg-blue-800 hover:scale-105"
+          : "text-gray-200 hover:text-white hover:bg-[#100073] hover:scale-105"
       }`}
     >
       {label}

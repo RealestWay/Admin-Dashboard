@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { UseHouses } from "../contexts/HouseContext";
+import { useAgentsUsers } from "../contexts/AgentsUsersContext";
 
 const Dashboard = () => {
   const [overviewData, setOverviewData] = useState({
@@ -13,8 +14,8 @@ const Dashboard = () => {
   useEffect(() => {
     setTimeout(() => {
       setOverviewData({
-        totalListings: 120, // Example data
-        totalUsers: 500,
+        totalListings: houses.data?.length, // Example data
+        totalUsers: users.length,
         totalRevenue: 150000,
         recentActivities: [
           "User John Doe listed a new property: 123 Main St.",
@@ -26,7 +27,7 @@ const Dashboard = () => {
     }, 1500);
   }, []);
   const { houses } = UseHouses();
-
+  const { users } = useAgentsUsers();
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       {/* Dashboard Summary */}
@@ -35,7 +36,7 @@ const Dashboard = () => {
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <h3 className="text-xl font-medium text-gray-700">Total Listings</h3>
           <p className="text-3xl font-semibold text-indigo-600">
-            {houses.data?.length}
+            {overviewData.totalListings}
           </p>
         </div>
 

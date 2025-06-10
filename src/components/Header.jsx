@@ -1,10 +1,12 @@
 import { faBell, faUserCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifications] = useState(5); // Example notification count
+  const { logout, user } = useAuth();
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -13,7 +15,13 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center w-full">
       {/* Left side: Title */}
-      <h1 className="text-2xl font-semibold text-blue-900">Admin Dashboard</h1>
+      <img
+        src="/logo.svg"
+        alt="logo"
+        width={200}
+        height={100}
+        className="text-2xlfont-bold text-center text-white"
+      />
 
       {/* Center: Search Bar (optional) */}
       <div className="flex items-center space-x-4">
@@ -45,6 +53,7 @@ const Header = () => {
             className="text-gray-700 hover:text-blue-500"
           >
             <FontAwesomeIcon icon={faUserCircle} size={32} />
+            <p>{user?.Fullname}</p>
           </button>
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
@@ -64,7 +73,10 @@ const Header = () => {
         </div>
 
         {/* Logout Button */}
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+        <button
+          onClick={() => logout()}
+          className="bg-[#100073] text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+        >
           Logout
         </button>
       </div>

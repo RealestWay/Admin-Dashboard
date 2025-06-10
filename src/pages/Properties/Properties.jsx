@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-import HouseList from "../components/HouseList";
+import HouseList from "../../components/HouseList";
 
 const Properties = () => {
   const [grid, toggleGrid] = useState(false);
@@ -52,7 +51,7 @@ const Properties = () => {
         >
           <option value="all">All Properties</option>
           <option value="available">Available</option>
-          <option value="notAvailable">Not Available</option>
+          <option value="not-available">Not Available</option>
         </select>
 
         {/* PropertyType Filter */}
