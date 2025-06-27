@@ -9,16 +9,14 @@ import { useAuth } from "../../contexts/AuthContext";
 import { UseHouses } from "../../contexts/HouseContext";
 
 const Agents = () => {
-  const { agents, handleDelete } = useAgentsUsers();
+  const { agents, handleDeleteUser } = useAgentsUsers();
   const { token } = useAuth();
   const { houses } = UseHouses();
 
   const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
-  const sagents = agents.data?.slice(
-    page * rowsPerPage,
-    (page + 1) * rowsPerPage
-  );
+  const rowsPerPage = 20;
+
+  const sagents = agents?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   return (
     <div
@@ -37,7 +35,9 @@ const Agents = () => {
           alignItems: "center",
         }}
       >
-        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>All Agents</h3>
+        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>
+          All Agents ({sagents.length})
+        </h3>
         <div style={{ display: "flex", gap: 1, borderRadius: "50px" }}>
           <button
             onClick={() => setPage(page - 1)}
@@ -56,7 +56,7 @@ const Agents = () => {
           </button>
           <button
             onClick={() => setPage(page + 1)}
-            disabled={(page + 1) * rowsPerPage >= agents.data.length}
+            disabled={(page + 1) * rowsPerPage >= agents?.length}
             style={{
               background: "#EAEEF4",
               border: "none",
@@ -98,7 +98,7 @@ const Agents = () => {
               phone={user.phone}
               houses={houses}
               index={index}
-              handleDelete={handleDelete}
+              handleDeleteUser={handleDeleteUser}
               token={token}
             />
           ))}
@@ -115,11 +115,11 @@ const Body = ({
   name,
   houses,
   index,
-  handleDelete,
+  handleDeleteUser,
   token,
 }) => {
   const [open, setOpen] = useState(false);
-  const agentHouses = houses.data.filter((house) => house.agentId === id);
+  const agentHouses = houses?.data?.filter((house) => house.user.id === id);
 
   return (
     <tr
@@ -156,7 +156,7 @@ const Body = ({
           gap: "8px",
         }}
       >
-        {agentHouses.length}
+        {agentHouses?.length}
       </td>
 
       <td style={{ padding: "8px", position: "relative" }}>
@@ -231,7 +231,7 @@ const Body = ({
                 padding: "6px 18px",
                 width: "100%",
               }}
-              onClick={() => handleDelete(id, token)}
+              onClick={() => handleDeleteUser(id, token)}
             >
               Delete
             </button>

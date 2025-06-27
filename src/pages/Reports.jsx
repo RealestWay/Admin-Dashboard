@@ -39,7 +39,7 @@ const Reports = () => {
     if (!newMessage.trim()) return;
 
     const newMsg = {
-      sender_id: user.id,
+      sender: { id: user.id },
       id: messages.length + 1,
       message: newMessage,
     };
@@ -78,7 +78,9 @@ const Reports = () => {
           {chats.map((item) => (
             <div
               key={item.id}
-              onClick={() => handleChatClick(item.id)}
+              onClick={() => {
+                handleChatClick(item.id);
+              }}
               className={`cursor-pointer p-3 rounded-lg border hover:bg-[#f4f6ff] ${
                 chat?.data?.id === item.id
                   ? "border-[#100073] bg-[#f4f6ff]"
@@ -86,11 +88,11 @@ const Reports = () => {
               }`}
             >
               <p className="text-blue-600 font-semibold">
-                Chat with {user.companyName ? chat?.user_id : chat?.agent_id}
+                Chat with {item?.user_id}
               </p>
-              <p className="text-gray-500 text-sm">House: {chat?.houseTitle}</p>
+              <p className="text-gray-500 text-sm">House: {item?.houseTitle}</p>
               <p className="text-gray-400 text-xs">
-                Last message: {chat?.messages?.at(-1)?.message || "No message"}
+                Last message: {item?.messages?.at(-1)?.message || "No message"}
               </p>
             </div>
           ))}
@@ -108,7 +110,7 @@ const Reports = () => {
               <div
                 key={idx}
                 className={`p-2 rounded-lg max-w-sm ${
-                  msg.sender_id === user.id
+                  msg.sender.id === user.id
                     ? "bg-[#00a256] text-white ml-auto"
                     : "bg-gray-100 text-gray-900"
                 }`}

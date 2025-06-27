@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 const AgentsUsersContext = createContext();
 
@@ -9,13 +10,13 @@ const AgentsUsersProvider = ({ children }) => {
   const [status, setStatus] = useState("");
   const [udeleted, setuDeleted] = useState(false);
   const [adeleted, setaDeleted] = useState(false);
-
+  const { token } = useAuth();
   //  Fetch Agents
   const fetchAgents = async () => {
     try {
       const res = await fetch("https://backend.realestway.com/api/agents");
       const data = await res.json();
-      setAgents(data);
+      setAgents(data.data);
     } catch {
       alert("Error fetch all agents");
     }
@@ -63,12 +64,19 @@ const AgentsUsersProvider = ({ children }) => {
   const fetchAwaitingAgents = async () => {
     try {
       const res = await fetch(
-        "https://backend.realestway.com/api/agents/onboarding-requests"
+        "https://backend.realestway.com/api/agents/onboarding/requests",
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const data = await res.json();
-      setAwaitingAgents(data.onboarding_requests);
-    } catch {
-      alert("Error fetch all agents");
+      setAwaitingAgents(data.data);
+    } catch (err) {
+      console.log(err);
+      alert("Error fetch onboarding agents");
     }
   };
 
@@ -101,8 +109,8 @@ const AgentsUsersProvider = ({ children }) => {
   useEffect(() => {
     fetchAgents();
     fetchUsers();
-    fetchAwaitingAgents();
-  }, []);
+    fetchAwaitingAgents(token);
+  }, [token]);
   return (
     <AgentsUsersContext.Provider
       value={{

@@ -1,10 +1,10 @@
-const ImageCarousel = ({ images }) => {
+const ImageCarousel = ({ medias }) => {
   return (
     <>
-      {images.map((src, index) => (
+      {medias.map((path, index) => (
         <img
           key={index}
-          src={`https://backend.realestway.com/storage/${src}`}
+          src={`https://backend.realestway.com/storage/${path}`}
           className="object-cover rounded-lg shadow-md snap-start"
           alt={`Gallery ${index + 1}`}
           sizes="cover"

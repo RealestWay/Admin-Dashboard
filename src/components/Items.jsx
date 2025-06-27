@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 const Items = ({ house }) => {
-  const { title, totalPrice, images, location, id, description } = house;
+  const { title, totalPrice, medias, location, id, description } = house;
   const { isAuthenticated } = useAuth();
 
   const itemStyle = `rounded-xl w-full items-center justify-center h-[200px]`;
@@ -17,7 +17,7 @@ const Items = ({ house }) => {
       <div
         className={itemStyle}
         style={{
-          background: `url(https://backend.realestway.com/storage/${images[0].src})`,
+          background: `url(https://backend.realestway.com/storage/${medias[0].path})`,
           backgroundSize: "cover",
           overflow: "hidden",
         }}
@@ -26,12 +26,12 @@ const Items = ({ house }) => {
           className="mx-auto mb-0 h-1/3 w-2/3 p-2 flex gap-4 overflow-x-auto scroll-smooth scrollbar-hide snap-x"
           style={{ scrollSnapType: "x mandatory" }}
         >
-          <ImageCarousel images={images} />
+          <ImageCarousel images={medias} />
         </div>
       </div>
       <div className="w-full flex justify-between text-sm py-2">
         <p>{title}</p>
-        <p>{location.address}</p>
+        <p>{location?.locationAddress}</p>
       </div>
       <div className="flex justify-between py-2">
         {isAuthenticated ? (

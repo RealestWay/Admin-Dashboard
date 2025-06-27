@@ -52,7 +52,7 @@ const AgentRegistration = () => {
 
     try {
       const response = await fetch(
-        "https://backend.realestway.com/api/agents/register",
+        "https://backend.realestway.com/api/agents",
         {
           method: "POST",
           headers: {

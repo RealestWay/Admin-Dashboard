@@ -8,11 +8,12 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAgentsUsers } from "../../contexts/AgentsUsersContext";
 
 const Users = () => {
-  const { handleDeleteUser, setStatus, users } = useAgentsUsers();
+  const { handleDeleteUser, users } = useAgentsUsers();
   const { token } = useAuth();
   const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
-  const allUsers = users.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+  const rowsPerPage = 15;
+  const nusers = users?.filter((user) => user.role === "user");
+  const allUsers = nusers?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   return (
     <div
@@ -31,7 +32,9 @@ const Users = () => {
           alignItems: "center",
         }}
       >
-        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>All Users</h3>{" "}
+        <h3 style={{ fontWeight: "600", marginBottom: "8px" }}>
+          All Users ({allUsers.length}/{nusers.length})
+        </h3>{" "}
         <div style={{ display: "flex", gap: 1, borderRadius: "50px" }}>
           <button
             onClick={() => setPage(page - 1)}
@@ -50,7 +53,7 @@ const Users = () => {
           </button>
           <button
             onClick={() => setPage(page + 1)}
-            disabled={(page + 1) * rowsPerPage >= users.length}
+            disabled={(page + 1) * rowsPerPage >= nusers.length}
             style={{
               background: "#EAEEF4",
               border: "none",

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { UseHouses } from "../contexts/HouseContext";
 import { useAgentsUsers } from "../contexts/AgentsUsersContext";
+import Qr from "../components/Qr";
 
 const Dashboard = () => {
   const [overviewData, setOverviewData] = useState({
@@ -70,6 +71,7 @@ const Dashboard = () => {
           ))}
         </ul>
       </div>
+      <Qr />
     </div>
   );
 };

@@ -34,7 +34,7 @@ const HouseList = ({
       // Filter by agent ID (search query)
       if (
         searchQuery &&
-        !house?.agentId.toLowerCase().includes(searchQuery.toLowerCase())
+        !house?.user.id.toLowerCase().includes(searchQuery.toLowerCase())
       ) {
         return false;
       }
@@ -76,7 +76,7 @@ const HouseList = ({
               <tr key={house?.id} className="hover:bg-gray-50 transition">
                 <td className="border px-4 py-2">
                   <img
-                    src={`https://backend.realestway.com/storage/${house?.images[0]?.src}`}
+                    src={`https://backend.realestway.com/storage/${house?.medias[0]?.path}`}
                     alt={house?.title}
                     className="w-12 h-12 object-cover rounded"
                   />
@@ -92,13 +92,13 @@ const HouseList = ({
                 </td>
                 <td className="border px-4 py-2 space-x-2">
                   <Link
-                    to={`/house/${house?.uniqueId}`}
+                    to={`/house/${house?.id}`}
                     className="text-sm text-[#100073] hover:underline"
                   >
                     View
                   </Link>
                   <button
-                    onClick={() => deleteHouse(house?.uniqueId, token)}
+                    onClick={() => deleteHouse(house?.id, token)}
                     className="text-sm text-red-600 hover:underline"
                   >
                     Delete
@@ -119,7 +119,7 @@ const HouseList = ({
           className="border rounded-lg shadow-lg overflow-hidden bg-white"
         >
           <img
-            src={`https://backend.realestway.com/storage/${house?.images[0].src}`} // Display the first image
+            src={`https://backend.realestway.com/storage/${house?.medias[0].path}`} // Display the first image
             alt={house?.title}
             className="w-full h-48 object-cover"
           />
@@ -127,13 +127,15 @@ const HouseList = ({
             <h3 className="text-lg font-semibold text-blue-900">
               {house?.title}
             </h3>
-            <p className="text-sm text-gray-600">{house?.location.address}</p>
+            <p className="text-sm text-gray-600">
+              {house?.location?.locationAddress}
+            </p>
             <p className="text-xl font-bold flex justify-between text-green-500 mt-2">
               <span>₦{house?.totalPrice}</span>{" "}
               <span className="text-xs">{house?.availability}</span>
             </p>
             <Link
-              to={`/house/${house.uniqueId}`}
+              to={`/house/${house.id}`}
               className="text-[#100073] hover:text-blue-800 mt-4 block"
             >
               <span> View Details</span>
