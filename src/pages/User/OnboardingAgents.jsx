@@ -7,14 +7,11 @@ import { useState } from "react";
 import { useAgentsUsers } from "../../contexts/AgentsUsersContext";
 
 const OnboardingAgents = () => {
-  const { awaitingAgents } = useAgentsUsers();
-
+  const { agents } = useAgentsUsers();
+  const fagents = agents?.filter((agent) => agent.status === "inactive");
   const [page, setPage] = useState(0);
   const rowsPerPage = 15;
-  const sagents = awaitingAgents?.slice(
-    page * rowsPerPage,
-    (page + 1) * rowsPerPage
-  );
+  const sagents = fagents?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   return (
     <div
@@ -54,7 +51,7 @@ const OnboardingAgents = () => {
           </button>
           <button
             onClick={() => setPage(page + 1)}
-            disabled={(page + 1) * rowsPerPage >= awaitingAgents?.length}
+            disabled={(page + 1) * rowsPerPage >= fagents?.length}
             style={{
               background: "#EAEEF4",
               border: "none",

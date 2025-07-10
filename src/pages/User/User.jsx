@@ -15,13 +15,12 @@ const User = () => {
     setaDeleted,
     fetchAgents,
     fetchUsers,
-    fetchAwaitingAgents,
     status,
   } = useAgentsUsers();
   return (
     <div>
       <div className="flex justify-between w-full">
-        <div className="flex gap-6 p-4 text-white">
+        <div className="flex gap-2 flex-wrap p-1 md:gap-6 md:p-4 text-white">
           <Link
             to={""}
             className={`bg-slate-700 py-3 px-5 rounded-lg ${
@@ -61,7 +60,6 @@ const User = () => {
             }`}
             onClick={() => {
               toggleUserCat("awaitingagents");
-              fetchAwaitingAgents();
               setAddAgent(false);
             }}
           >
@@ -75,7 +73,9 @@ const User = () => {
           <FontAwesomeIcon icon={faUserPlus} color="white" /> Add Agent
         </button>
       </div>
-      {addAgent ? <AgentRegistration /> : <Outlet />}
+      <div className="w-full overflow-auto">
+        {addAgent ? <AgentRegistration /> : <Outlet />}
+      </div>
       {udeleted && (
         <Deleted
           udeleted={udeleted}

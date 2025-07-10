@@ -88,9 +88,11 @@ const Reports = () => {
               }`}
             >
               <p className="text-blue-600 font-semibold">
-                Chat with {item?.user_id}
+                Chat with {item?.user.fullName}
               </p>
-              <p className="text-gray-500 text-sm">House: {item?.houseTitle}</p>
+              <p className="text-gray-500 text-sm">
+                User Type: {item?.user?.role}
+              </p>
               <p className="text-gray-400 text-xs">
                 Last message: {item?.messages?.at(-1)?.message || "No message"}
               </p>
@@ -103,20 +105,33 @@ const Reports = () => {
       {chat?.data?.id && (
         <div className="flex-1 flex flex-col bg-white rounded-lg shadow-lg p-4 border border-[#00a256]">
           <h2 className="text-lg font-bold mb-3 text-[#00a256]">
-            Chat with {chat.data.user?.uniqueId || chat.data.agent?.uniqueId}
+            Chat with {chat.data.user?.role} {chat.data.user?.fullName}
           </h2>
           <div className="flex-1 overflow-y-auto max-h-[70vh] space-y-2 px-2">
             {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`p-2 rounded-lg max-w-sm ${
-                  msg.sender.id === user.id
-                    ? "bg-[#00a256] text-white ml-auto"
-                    : "bg-gray-100 text-gray-900"
-                }`}
-              >
-                {msg.message}
-              </div>
+              <>
+                <div
+                  key={idx}
+                  className={`p-2 rounded-lg max-w-sm ${
+                    msg.sender.id === user.id
+                      ? "bg-[#00a256] text-white ml-auto"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
+                >
+                  {msg.message}
+                </div>
+                <div
+                  className={`text-gray-900 text-sm max-w-sm ${
+                    msg.sender.id === user.id ? "ml-auto" : " "
+                  }`}
+                >
+                  {" "}
+                  {new Date(msg?.createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+              </>
             ))}
           </div>
 

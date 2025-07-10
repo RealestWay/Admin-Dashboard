@@ -61,22 +61,50 @@ const AgentsUsersProvider = ({ children }) => {
   };
 
   // Fetch Awaiting Agents registered for onboarding
-  const fetchAwaitingAgents = async () => {
+  // const fetchAwaitingAgents = async () => {
+  //   try {
+  //     const res = await fetch(
+  //       "https://backend.realestway.com/api/agents/onboarding/requests",
+  //       {
+  //         headers: {
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const data = await res.json();
+  //     setAwaitingAgents(data.data);
+  //   } catch (err) {
+  //     console.log(err);
+  //     alert("Error fetch onboarding agents");
+  //   }
+  // };
+
+  const handleAgentStatus = async (id, token, status) => {
+    const url = `https://backend.realestway.com/api/agents/${id}/status`;
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
     try {
-      const res = await fetch(
-        "https://backend.realestway.com/api/agents/onboarding/requests",
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await res.json();
-      setAwaitingAgents(data.data);
-    } catch (err) {
-      console.log(err);
-      alert("Error fetch onboarding agents");
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify({ status: status }),
+      });
+
+      if (response.ok) {
+        setStatus(`User ${id} status updated successfully.`);
+        fetchUsers();
+      } else {
+        setStatus(`Failed to update user ${id}. Status: ${response.status}`);
+      }
+    } catch (error) {
+      setStatus(`Error: ${error.message}`);
+    } finally {
+      setuDeleted(true);
     }
   };
 
@@ -109,7 +137,6 @@ const AgentsUsersProvider = ({ children }) => {
   useEffect(() => {
     fetchAgents();
     fetchUsers();
-    fetchAwaitingAgents(token);
   }, [token]);
   return (
     <AgentsUsersContext.Provider
@@ -119,7 +146,6 @@ const AgentsUsersProvider = ({ children }) => {
         fetchUsers,
         handleDelete,
         awaitingAgents,
-        fetchAwaitingAgents,
         users,
         handleDeleteUser,
         status,
@@ -127,6 +153,7 @@ const AgentsUsersProvider = ({ children }) => {
         adeleted,
         setuDeleted,
         setaDeleted,
+        handleAgentStatus,
       }}
     >
       {children}

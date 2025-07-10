@@ -9,7 +9,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { UseHouses } from "../../contexts/HouseContext";
 
 const Agents = () => {
-  const { agents, handleDeleteUser } = useAgentsUsers();
+  const { agents, handleDeleteUser, handleAgentStatus } = useAgentsUsers();
   const { token } = useAuth();
   const { houses } = UseHouses();
 
@@ -85,6 +85,7 @@ const Agents = () => {
             <th style={{ padding: "8px" }}>Agent Name</th>
             <th style={{ padding: "8px" }}>Phone Number</th>
             <th style={{ padding: "8px" }}>Posted Houses </th>
+            <th style={{ padding: "8px" }}>Status </th>
             <th style={{ padding: "8px" }}>Action</th>
           </tr>
         </thead>
@@ -98,8 +99,10 @@ const Agents = () => {
               phone={user.phone}
               houses={houses}
               index={index}
+              status={user.status}
               handleDeleteUser={handleDeleteUser}
               token={token}
+              handleAgentStatus={handleAgentStatus}
             />
           ))}
         </tbody>
@@ -115,8 +118,10 @@ const Body = ({
   name,
   houses,
   index,
+  status,
   handleDeleteUser,
   token,
+  handleAgentStatus,
 }) => {
   const [open, setOpen] = useState(false);
   const agentHouses = houses?.data?.filter((house) => house.user.id === id);
@@ -158,7 +163,14 @@ const Body = ({
       >
         {agentHouses?.length}
       </td>
-
+      <td
+        style={{
+          padding: "8px",
+          gap: "8px",
+        }}
+      >
+        {status}
+      </td>
       <td style={{ padding: "8px", position: "relative" }}>
         <button
           style={{
@@ -222,6 +234,21 @@ const Body = ({
                 padding: "6px 18px",
                 width: "100%",
               }}
+              onClick={() =>
+                status === "inactive"
+                  ? handleAgentStatus(id, token, "active")
+                  : handleAgentStatus(id, token, "inactive")
+              }
+            >
+              {status === "inactive" ? "Activate" : "Deactivate"}
+            </button>
+            <button
+              style={{
+                borderBottom: "1px solid gray",
+                padding: "6px 18px",
+                width: "100%",
+              }}
+              onClick={() => handleAgentStatus(id, token, "suspended")}
             >
               Suspend
             </button>

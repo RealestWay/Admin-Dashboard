@@ -22,7 +22,7 @@ const Properties = () => {
       <h2 className="text-2xl font-bold mb-6">All Listings</h2>
 
       {/* Filter and Search Section */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="md:flex justify-between grid grid-cols-2 gap-2 items-center mb-6">
         {/* Grid/List View Toggle */}
         <div className="flex items-center space-x-4">
           <button

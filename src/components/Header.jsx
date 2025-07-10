@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-md p-4 flex justify-between items-center w-full">
+    <header className="bg-white shadow-md p-4 flex flex-col md:flex-row justify-between items-center w-full">
       {/* Left side: Title */}
       <img
         src="/logo.svg"
