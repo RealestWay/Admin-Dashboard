@@ -15,7 +15,7 @@ import Properties from "./pages/Properties/Properties";
 import ViewProperty from "./pages/Properties/ViewProperty";
 import { ChatProvider } from "./contexts/ChatsContext";
 import { BlogProvider } from "./contexts/BlogContext";
-import OnboardingAgents from "./pages/User/onboardingAgents";
+import OnboardingAgents from "./pages/User/OnboardAgents";
 
 function App() {
   return (
