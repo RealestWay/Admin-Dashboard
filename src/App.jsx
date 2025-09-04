@@ -11,11 +11,11 @@ import { AgentsUsersProvider } from "./contexts/AgentsUsersContext";
 import User from "./pages/User/User";
 import Agents from "./pages/User/Agents";
 import { AuthProvider } from "./contexts/AuthContext";
-import OnboardingAgents from "./pages/User/onboardingAgents";
 import Properties from "./pages/Properties/Properties";
 import ViewProperty from "./pages/Properties/ViewProperty";
 import { ChatProvider } from "./contexts/ChatsContext";
 import { BlogProvider } from "./contexts/BlogContext";
+import OnboardingAgents from "./pages/User/onboardingAgents";
 
 function App() {
   return (
