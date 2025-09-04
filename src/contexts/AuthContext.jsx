@@ -59,7 +59,7 @@ function AuthProvider({ children }) {
       if (!res.ok) throw new Error("Failed to log in user");
 
       const data = await res.json();
-
+     
       return data;
     } catch (err) {
       return null;

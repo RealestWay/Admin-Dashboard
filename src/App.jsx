@@ -15,6 +15,7 @@ import OnboardingAgents from "./pages/User/onboardingAgents";
 import Properties from "./pages/Properties/Properties";
 import ViewProperty from "./pages/Properties/ViewProperty";
 import { ChatProvider } from "./contexts/ChatsContext";
+import { BlogProvider } from "./contexts/BlogContext";
 
 function App() {
   return (
@@ -22,27 +23,29 @@ function App() {
       <ChatProvider>
         <HouseProvider>
           <AgentsUsersProvider>
-            <BrowserRouter>
-              <ScrollToTop />
-              <Routes>
-                <Route path="/" element={<AdminLayout />}>
-                  <Route index element={<Dashboard />} />
-                  <Route path="/properties" element={<Properties />} />
-                  <Route path="/user" element={<User />}>
-                    <Route index element={<Users />} />
-                    <Route path="/user/agents" element={<Agents />} />
-                    <Route
-                      path="/user/onboarding-agents"
-                      element={<OnboardingAgents />}
-                    />
+            <BlogProvider>
+              <BrowserRouter>
+                <ScrollToTop />
+                <Routes>
+                  <Route path="/" element={<AdminLayout />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="/properties" element={<Properties />} />
+                    <Route path="/user" element={<User />}>
+                      <Route index element={<Users />} />
+                      <Route path="/user/agents" element={<Agents />} />
+                      <Route
+                        path="/user/onboarding-agents"
+                        element={<OnboardingAgents />}
+                      />
+                    </Route>
+                    <Route path="/house/:id" element={<ViewProperty />} />
+                    <Route path="/transactions" element={<Transactions />} />
+                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/settings" element={<Settings />} />
                   </Route>
-                  <Route path="/house/:id" element={<ViewProperty />} />
-                  <Route path="/transactions" element={<Transactions />} />
-                  <Route path="/reports" element={<Reports />} />
-                  <Route path="/settings" element={<Settings />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
+                </Routes>
+              </BrowserRouter>
+            </BlogProvider>
           </AgentsUsersProvider>
         </HouseProvider>
       </ChatProvider>

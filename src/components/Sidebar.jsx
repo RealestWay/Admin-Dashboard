@@ -1,4 +1,15 @@
-import { CloseCircle, CloseSquare, HamburgerMenu } from "iconsax-reactjs";
+import {
+  Building,
+  CloseCircle,
+  CloseSquare,
+  Element4,
+  HamburgerMenu,
+  Home,
+  MoneyChange,
+  Note1,
+  People,
+  Setting2,
+} from "iconsax-reactjs";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -11,38 +22,52 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="w-[21%] bg-[#100073] text-white min-h-screen hidden md:inline p-6 shadow-lg">
+      <div className="w-[21%] bg-gradient-to-r from-[#100073] to-[#00a256] text-white min-h-screen hidden md:inline py-6 pl-6 shadow-lg">
         <h2 className="text-2xl font-bold mb-12 text-center text-white">
           Admin Dashboard
         </h2>
         <hr />
-        <nav className="flex flex-col gap-6 pt-7">
-          <SidebarLink to="/" label="Dashboard" isActive={isActive("/")} />
+        <nav className="flex flex-col gap-6 pt-7 ">
+          <SidebarLink to="/" label="Dashboard" isActive={isActive("/")}>
+            {" "}
+            <Element4 />
+          </SidebarLink>
           <SidebarLink
             to="/properties"
             label="Properties"
             isActive={isActive("/properties")}
-          />
+          >
+            <Building />
+          </SidebarLink>
           <SidebarLink
             to="/user"
             label="Users/Agents"
             isActive={isActive("/user")}
-          />
+          >
+            <People />
+          </SidebarLink>
           <SidebarLink
             to="/transactions"
             label="Transactions"
             isActive={isActive("/transactions")}
-          />
+          >
+            <MoneyChange />
+          </SidebarLink>
           <SidebarLink
             to="/reports"
             label="Reports/Disputes"
             isActive={isActive("/reports")}
-          />
+          >
+            <Note1 />
+          </SidebarLink>
           <SidebarLink
             to="/settings"
             label="Settings"
             isActive={isActive("/settings")}
-          />
+          >
+            {" "}
+            <Setting2 />
+          </SidebarLink>
         </nav>
       </div>
       <div className="bg-[#100073] p-4 text-white md:hidden flex justify-between items-center">
@@ -71,7 +96,9 @@ const Sidebar = () => {
 
         <hr />
         <nav className="flex flex-col gap-6 pt-7">
-          <SidebarLink to="/" label="Dashboard" isActive={isActive("/")} />
+          <SidebarLink to="/" label="Dashboard" isActive={isActive("/")}>
+            <Home />
+          </SidebarLink>
           <SidebarLink
             to="/properties"
             label="Properties"
@@ -103,18 +130,31 @@ const Sidebar = () => {
   );
 };
 
-const SidebarLink = ({ to, label, isActive }) => {
+import { NavLink } from "react-router-dom";
+
+const SidebarLink = ({ to, label, children }) => {
   return (
-    <Link
+    <NavLink
       to={to}
-      className={`block py-2 px-4 rounded-lg transition-all duration-300 ${
+      className={({ isActive }) =>
+        `py-2 px-4 transition-all duration-300 flex items-center gap-2 ${
+          isActive
+            ? "bg-white py-6 text-[#100073] font-bold shadow-md border-l-4 border-[#100073]"
+            : "text-gray-300 hover:text-white hover:bg-[#100073]/80 hover:scale-105"
+        }`
+      }
+      style={({ isActive }) =>
         isActive
-          ? "bg-gradient-to-r from-green-400 via-blue-500 to-green-400 text-white shadow-lg scale-105"
-          : "text-gray-200 hover:text-white hover:bg-[#100073] hover:scale-105"
-      }`}
+          ? {
+              borderTopLeftRadius: "40px",
+              borderBottomLeftRadius: "40px",
+            }
+          : {}
+      }
     >
-      {label}
-    </Link>
+      {children}
+      <span>{label}</span>
+    </NavLink>
   );
 };
 
